@@ -11,7 +11,7 @@ export default function Recipe() {
   const [state, setState] = useState("front");
   const [loading, setLoading] = useState(true);
   const [ingredients, setIngredients] = useState([]);
-  let [description, setDescription] = useState("");
+  const [description, setDescription] = useState("");
 
 
   const changeState = () => {
@@ -25,6 +25,7 @@ export default function Recipe() {
       setIngredients(addIngredientsAndMeasures(response.data.ingredients, response.data.measures))
       setDescription(shortenDescription(response.data.strInstructions));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addIngredientsAndMeasures = (ingredients, measures) => {

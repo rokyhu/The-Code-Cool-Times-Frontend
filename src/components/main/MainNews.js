@@ -1,5 +1,5 @@
 import "../../App.css";
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { ButtonGroup, Button } from "@material-ui/core";
 import { NewsContext } from "./NewsContext";
 import AuthorButton from "./AuthorButton";
@@ -9,16 +9,19 @@ export const MainNews = () => {
   const altImage = require("../../resources/images/placeholder.png");
 
   const context = useContext(NewsContext);
-  const [articlesIndex, setArticlesIndex] = useState(0);
 
   const changeNews = (incrementer) => {
     if (incrementer === "next") {
-      setArticlesIndex((articlesIndex + 1) % context.articles.length);
+      context.setArticlesIndex(
+        (context.articlesIndex + 1) % context.articles.length
+      );
     } else {
-      setArticlesIndex(
-        (articlesIndex + context.articles.length - 1) % context.articles.length
+      context.setArticlesIndex(
+        (context.articlesIndex + context.articles.length - 1) %
+          context.articles.length
       );
     }
+    console.log(context.articlesIndex);
   };
 
   if (context.loading) {
@@ -45,7 +48,7 @@ export const MainNews = () => {
       >
         <Button
           variant="contained"
-          disabled={articlesIndex === 0 ? true : false}
+          disabled={context.articlesIndex === 0 ? true : false}
           onClick={() => changeNews("previous")}
           size="small"
           style={{
@@ -57,7 +60,9 @@ export const MainNews = () => {
         </Button>
         <Button
           variant="contained"
-          disabled={articlesIndex === 19 ? true : false}
+          disabled={
+            context.articlesIndex === context.articles.length - 1 ? true : false
+          }
           onClick={() => changeNews("next")}
           size="small"
           style={{
@@ -70,7 +75,10 @@ export const MainNews = () => {
       </ButtonGroup>
 
       <img
-        src={context.articles[articlesIndex]?.urlToImage ?? altImage.default}
+        src={
+          context.articles[context.articlesIndex]?.urlToImage ??
+          altImage.default
+        }
         alt=""
         style={{
           width: "100%",
@@ -81,21 +89,25 @@ export const MainNews = () => {
       ></img>
 
       <AuthorButton
-        author={context.articles[articlesIndex]?.author ?? "No author"}
+        author={context.articles[context.articlesIndex]?.author ?? "No author"}
       />
       <SourceButton
-        source={context.articles[articlesIndex]?.source.name ?? "No source"}
-        sourceUrl={context.articles[articlesIndex]?.url ?? "No data"}
+        source={
+          context.articles[context.articlesIndex]?.source.name ?? "No source"
+        }
+        sourceUrl={context.articles[context.articlesIndex]?.url ?? "No data"}
       />
       <a
         className="link"
-        href={context.articles[articlesIndex]?.url ?? "No data"}
+        href={context.articles[context.articlesIndex]?.url ?? "No data"}
         target="_blank"
         rel="noreferrer"
       >
-        <h2>{context.articles[articlesIndex]?.title ?? "No title"}</h2>
+        <h2>{context.articles[context.articlesIndex]?.title ?? "No title"}</h2>
       </a>
-      <p>{context.articles[articlesIndex]?.description ?? "No content"}</p>
+      <p>
+        {context.articles[context.articlesIndex]?.description ?? "No content"}
+      </p>
     </div>
   );
 };

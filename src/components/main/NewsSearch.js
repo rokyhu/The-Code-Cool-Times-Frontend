@@ -28,7 +28,8 @@ export default function NewsSearch() {
     };
     const handleSubmit = () => {
       if (value) {
-        context.changeNewsTheme(value);
+        context.setArticlesIndex(0);
+        context.changeNewsTheme(["keyword=", value]);
         context.setLoading(true);
       }
 
@@ -38,7 +39,7 @@ export default function NewsSearch() {
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [value]);
+  }, [context, value]);
 
   const handleChange = (event) => {
     setValue(event.target.value);
