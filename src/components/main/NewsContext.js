@@ -3,14 +3,12 @@ import axios from "axios";
 
 export const NewsContext = createContext();
 
-const apiKey = process.env.REACT_APP_API_KEY_NEWS_4;
-
 export const NewsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [articles, setArticles] = useState([]);
-  const [newsTheme, setNewsTheme] = useState("everything");
-
-  const todayDate = new Date().toISOString().slice(0, 10);
+  const [newsTheme, setNewsTheme] = useState(["", "top-news"]);
+  const [articlesLength, setArticlesLength] = useState(0);
+  const [articlesIndex, setArticlesIndex] = useState(0);
 
   useEffect(() => {
     getTopNewsForTheme(newsTheme);
@@ -23,23 +21,17 @@ export const NewsProvider = ({ children }) => {
 
   const getTopNewsForTheme = async (newsTheme) => {
     const response = await axios.get(
-      "https://newsapi.org/v2/everything?q=" +
-        newsTheme +
-        "&from=" +
-        todayDate +
-        "&to=" +
-        todayDate +
-        "&language=en" +
-        "&apiKey=" +
-        apiKey
+      "http://localhost:8080/news/v1/" + newsTheme[0] + newsTheme[1]
     );
-    const responsesWithNoTag = response.data.articles.filter(
-      (article) => !article.description.includes("<")
-    );
-    const responseWithNoTagAndLink = responsesWithNoTag.filter(
-      (article) => !article.description.includes("www.")
-    );
-    setArticles(responseWithNoTagAndLink);
+    // this goes to backend, gives error anyway for some reason, ask Benec?
+    //const responsesWithNoTag = response.data.articles.filter(
+    //  (article) => !article.description.includes("<")
+    //);
+    //    const responseWithNoTagAndLink = responsesWithNoTag.filter(
+    //      (article) => !article.description.includes("www.")
+    //    );
+    setArticles(response.data.articles);
+    setArticlesLength(response.data.articles.length);
     setLoading(false);
   };
   return (
@@ -49,9 +41,11 @@ export const NewsProvider = ({ children }) => {
         loading: loading,
         setArticles: setArticles,
         setLoading: setLoading,
-        apiKey: apiKey,
         setNewsTheme: setNewsTheme,
         changeNewsTheme: changeNewsTheme,
+        articlesLength: articlesLength,
+        articlesIndex: articlesIndex,
+        setArticlesIndex: setArticlesIndex,
       }}
     >
       {children}
