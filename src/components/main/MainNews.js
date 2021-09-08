@@ -1,5 +1,5 @@
 import "../../App.css";
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { ButtonGroup, Button } from "@material-ui/core";
 import { NewsContext } from "./NewsContext";
 import AuthorButton from "./AuthorButton";
