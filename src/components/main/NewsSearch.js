@@ -28,7 +28,8 @@ export default function NewsSearch() {
     };
     const handleSubmit = () => {
       if (value) {
-        context.changeNewsTheme(value);
+        context.setArticlesIndex(0);
+        context.changeNewsTheme(["keyword=", value]);
         context.setLoading(true);
       }
 
