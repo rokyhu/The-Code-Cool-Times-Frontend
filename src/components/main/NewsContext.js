@@ -3,15 +3,12 @@ import axios from "axios";
 
 export const NewsContext = createContext();
 
-const apiKey = process.env.REACT_APP_API_KEY_NEWS_4;
-
 export const NewsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [articles, setArticles] = useState([]);
   const [newsTheme, setNewsTheme] = useState(["", "top-news"]);
-
-  const todayDate = new Date().toISOString().slice(0, 10);
-  console.log(todayDate);
+  const [articlesLength, setArticlesLength] = useState(0);
+  const [articlesIndex, setArticlesIndex] = useState(0);
 
   useEffect(() => {
     getTopNewsForTheme(newsTheme);
@@ -34,6 +31,7 @@ export const NewsProvider = ({ children }) => {
     //      (article) => !article.description.includes("www.")
     //    );
     setArticles(response.data.articles);
+    setArticlesLength(response.data.articles.length);
     setLoading(false);
   };
   return (
@@ -43,9 +41,11 @@ export const NewsProvider = ({ children }) => {
         loading: loading,
         setArticles: setArticles,
         setLoading: setLoading,
-        apiKey: apiKey,
         setNewsTheme: setNewsTheme,
         changeNewsTheme: changeNewsTheme,
+        articlesLength: articlesLength,
+        articlesIndex: articlesIndex,
+        setArticlesIndex: setArticlesIndex,
       }}
     >
       {children}
