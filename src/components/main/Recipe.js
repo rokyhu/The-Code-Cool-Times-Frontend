@@ -8,43 +8,26 @@ export default function Recipe() {
   const [recipe, setRecipe] = useState([]);
   const [state, setState] = useState("front");
   const [loading, setLoading] = useState(true);
+  const [ingredients, setIngredients] = useState([]);
+  const [measures, setMeasures] = useState([]);
+
 
   const changeState = () => {
     setState(state === "front" ? "back" : "front");
   };
 
-  const getRecipeWithShortDescription = useCallback(() => {
+  useEffect(() => {
     axios.get(recipeUrl).then((response) => {
-      if (response.data.strInstructions.length > 600) {
-        getRecipeWithShortDescription();
-      } else {
-        setLoading(false);
-        setRecipe(response.data);
-        console.log(response.data)
-      }
+      setLoading(false);
+      setRecipe(response.data);
+      setIngredients(response.data.ingredients);
+      setMeasures(response.data.measures);
     });
   }, []);
 
-  useEffect(() => {
-    getRecipeWithShortDescription();
-  }, [getRecipeWithShortDescription]);
-
-  const capitalize = (str) => {
-    if(str !== null){
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-  };
-
-  const getMaxNumOfIngredients = () => {
-    const maxNumber = 10;
-    let ingredients = Object.keys(recipe)
-      .filter((item) => item.toString().startsWith("strIngredient"))
-      .filter((key) => recipe[key] !== "")
-      .map((key) => capitalize(recipe[key]));
-
-    let uniqueIngredients = [...new Set(ingredients)]
-    return uniqueIngredients.slice(0, maxNumber);
-  };
+  const addIngredientsAndMeasures = () => {
+    return  ingredients.map((x, i) => `${x}: ${measures[i]}`); 
+  }
 
   const recipeFront = (
     <div>
@@ -55,7 +38,7 @@ export default function Recipe() {
         text={"See recipe"}
         callback={() => changeState()}
       ></RecipeButton>
-      {getMaxNumOfIngredients().map((ingredient) => (
+      {addIngredientsAndMeasures().map((ingredient) => (
         <p key={ingredient}>{ingredient}</p>
       ))}
     </div>
