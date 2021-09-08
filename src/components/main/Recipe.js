@@ -3,7 +3,7 @@ import axios from "axios";
 import RecipeButton from "./RecipeButton";
 
 export default function Recipe() {
-  const recipeUrl = "https://www.themealdb.com/api/json/v1/1/random.php";
+  const recipeUrl = "http://localhost:8080/recipe/v1/random";
 
   const [recipe, setRecipe] = useState([]);
   const [state, setState] = useState("front");
@@ -15,11 +15,12 @@ export default function Recipe() {
 
   const getRecipeWithShortDescription = useCallback(() => {
     axios.get(recipeUrl).then((response) => {
-      if (response.data.meals[0].strInstructions.length > 600) {
+      if (response.data.strInstructions.length > 600) {
         getRecipeWithShortDescription();
       } else {
         setLoading(false);
-        setRecipe(response.data.meals[0]);
+        setRecipe(response.data);
+        console.log(response.data)
       }
     });
   }, []);
