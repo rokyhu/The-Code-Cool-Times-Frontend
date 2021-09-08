@@ -11,7 +11,7 @@ export default function NewsButton({ newsTheme }) {
   return (
     <Button
       className="CategorySelector"
-      onClick={() => context.changeNewsTheme(newsTheme)}
+      onClick={() => context.changeNewsTheme(["category=", newsTheme])}
       size="small"
     >
       {newsTheme}
