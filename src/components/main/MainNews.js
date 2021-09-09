@@ -21,7 +21,6 @@ export const MainNews = () => {
           context.articles.length
       );
     }
-    console.log(context.articlesIndex);
   };
 
   if (context.loading) {
