@@ -23,13 +23,6 @@ export const NewsProvider = ({ children }) => {
     const response = await axios.get(
       "http://localhost:8080/news/v1/" + newsTheme[0] + newsTheme[1]
     );
-    // this goes to backend, gives error anyway for some reason, ask Benec?
-    //const responsesWithNoTag = response.data.articles.filter(
-    //  (article) => !article.description.includes("<")
-    //);
-    //    const responseWithNoTagAndLink = responsesWithNoTag.filter(
-    //      (article) => !article.description.includes("www.")
-    //    );
     setArticles(response.data.articles);
     setArticlesLength(response.data.articles.length);
     setLoading(false);
